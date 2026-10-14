@@ -191,9 +191,11 @@ npx astryx theme add neutral   # генерирует src/astryx-themes.ts
 npx astryx component <Name>    # props каждого компонента перед использованием
 ```
 
-* Порядок слоёв объявлен первым импортом (`src/styles/layers.css`):
+* Порядок слоёв объявлен инлайн первым элементом `<head>` в `index.html`
+  (и дублируется первым импортом `src/styles/layers.css`):
   `reset, theme, base, astryx-base, astryx-theme, components, utilities`.
-  Foundation smoke test (padding кнопки ≠ 0) проходит.
+  Это важно: ленивые CSS-чанки грузятся раньше CSS входа. Foundation smoke
+  test закреплён e2e-тестом `tests/e2e/design-foundation.spec.ts`.
 * Акцент магазина применяется в рантайме через документированный
   `defineTheme({ extends, color: { accent } })` + `--color-on-accent`.
 * shadcn-классы (`bg-background`, `text-muted-foreground` …) отображены на

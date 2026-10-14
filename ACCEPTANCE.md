@@ -22,10 +22,10 @@ PostgreSQL 16, PostgREST 12.2.3, Supabase Auth 2.180.0, Deno 2.9.6,
 | `npm run lint` (oxlint) | 0 ошибок, 2 предупреждения fast-refresh |
 | `npm run test:functions` (`deno check` всех Edge Functions) | OK |
 | `npm test` + `npm run test:stack` (vitest) | **11 файлов, 102 теста — все прошли** |
-| `npm run test:e2e` (Playwright, Pixel 7) | **3 теста — все прошли** |
+| `npm run test:e2e` (Playwright, Pixel 7) | **4 теста — все прошли** |
 | `npm run tenant:validate -- --all` | rebro ✓, taiga ✓ |
 | `npm run tenant:verify -- rebro/taiga` (локальный стек + собранный сайт) | **26/26 проверок** для каждого |
-| Foundation smoke test Astryx (padding кнопки ≠ 0, порядок слоёв) | пройден после выноса `@layer` в первый импорт |
+| Foundation smoke test Astryx (padding кнопки ≠ 0, порядок слоёв) | пройден; закреплён e2e-тестом `design-foundation.spec.ts` |
 
 ### SQL / integration (реальный PostgreSQL, миграции проекта, роли как в Supabase) — 62 теста
 
@@ -116,7 +116,7 @@ gateway → Edge Function `public-api` → PostgREST → Postgres, Supabase Auth
 полезная нагрузка расшифровывается ключами «браузера», повторный запуск
 ничего не дублирует; неверный cron-секрет — 403.
 
-### Playwright — 3 сценария
+### Playwright — 4 сценария
 
 1. **Покупатель → владелец**: каталог → карточка в bottom sheet → корзина →
    время выдачи от сервера → контакты → «Заказ принят»; заказ в «Мои заказы»
@@ -130,6 +130,12 @@ gateway → Edge Function `public-api` → PostgREST → Postgres, Supabase Auth
    именно taiga** и явное состояние «Нет соединения».
 3. **Кабинет**: отдельный scope `/s/rebro/owner/` и `owner.webmanifest`; после
    выхода нет API-ответов в кэшах и сессии в хранилище.
+4. **Дизайн-фундамент на реальных страницах**: кнопки Astryx сохраняют
+   padding и фон на витрине и в лениво загружаемом кабинете, акцент магазина
+   доходит до primary-кнопки. Тест добавлен после найденной визуальной
+   регрессии: при выносе кабинета в отдельный чанк CSS Astryx начал
+   загружаться раньше объявления порядка `@layer`, и preflight Tailwind
+   обнулял стили. Исправлено инлайн-объявлением слоёв первым в `<head>`.
 
 ### Конвейер вручную (выполнено)
 

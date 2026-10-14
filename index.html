@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
     <meta name="color-scheme" content="dark" />
+    <!-- Cascade-layer order must be declared before any stylesheet, including
+         CSS chunks that load ahead of the entry CSS (see SETUP.md, Astryx). -->
+    <style>@layer reset, theme, base, astryx-base, astryx-theme, components, utilities;</style>
     <title>Заказы на самовывоз</title>
     <!--tenant-head-->
   </head>
