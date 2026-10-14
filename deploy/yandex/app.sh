@@ -16,7 +16,7 @@ SUPABASE_REF="${SUPABASE_REF:-self-hosted/v0.8.2}"
 SUPA_DIR="${SUPA_DIR:-/opt/supabase}"
 REPO_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 NODE_IMAGE="${NODE_IMAGE:-node:22-bookworm}"
-COMPOSE_FILES="docker-compose.yml:docker-compose.caddy.yml:docker-compose.app.yml"
+COMPOSE_FILES="docker-compose.yml:docker-compose.caddy.yml:docker-compose.app.yml${EXTRA_COMPOSE:+:$EXTRA_COMPOSE}"
 
 log() { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
 die() { printf '\033[1;31mError:\033[0m %s\n' "$*" >&2; exit 1; }
@@ -253,7 +253,7 @@ cmd_install() {
 
   sync_functions
   log "Starting containers (first start downloads images, a few minutes)"
-  pull_images
+  [ "${SKIP_PULL:-0}" = 1 ] || pull_images
   dc up -d
   cmd_migrate
   publish_all

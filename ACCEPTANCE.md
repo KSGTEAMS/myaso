@@ -167,3 +167,37 @@ gateway → Edge Function `public-api` → PostgREST → Postgres, Supabase Auth
 * Время выдачи владелец задаёт свободно (`datetime-local` во времени
   магазина); покупатель — только по сетке слотов.
 * Генерированные изображения — заглушки до замены реальными фото.
+
+## 4. Self-hosted Supabase для Яндекс Облака (выполнено 2026-10-14)
+
+Сценарий из YANDEX-CLOUD.md прогнан в этом окружении командой
+`deploy/yandex/app.sh install http://localhost`, на тех же образах, что
+встанут на ВМ: официальный self-hosted Supabase `self-hosted/v0.8.2`
+(Postgres 17.6, GoTrue 2.196, PostgREST 14.17, Storage 1.74, Edge Runtime
+1.76, Envoy) + Caddy.
+
+| Проверка | Результат |
+|---|---|
+| Все 13 миграций на Postgres 17 из образа Supabase | применились без правок |
+| pg_cron: задания `notify-dispatch` (каждую минуту), `cleanup-counters` | созданы миграцией, запуски `succeeded` |
+| Vault: `project_url`, `cron_secret` | созданы `app.sh` |
+| Цепочка cron → pg_net → Edge Function `notify-dispatch` | HTTP 200; задание «новый заказ» live-магазина забрано и закрыто (`skipped`: нет подписок), напоминание ждёт своего времени |
+| Supabase Storage: bucket `tenant-media` и 3 политики | владелец пишет в `<tenant>/owner/`; чужая папка, `pipeline/` и anon — отказ RLS; публичное чтение 200 |
+| Auth: регистрация отключена, владельцы через admin API, вход паролем, токены ES256 | работает, в т.ч. проверка JWT в `ai-chat` |
+| Caddy: сайт + API на одном домене, оболочки `/s/<slug>/…` и `/s/<slug>/owner/…`, MIME манифеста | корректно |
+| Playwright (4 сценария) против `E2E_BASE_URL=http://localhost` | **4/4 прошли** |
+| `tenant:verify` rebro/taiga против установки | **26/26** у каждого |
+| `app.sh publish taiga --live` | демо удалено (14 заказов), реальный заказ не демо |
+| Повторный `app.sh update` | 0 новых миграций, конфигурация не изменилась, live-статус сохранился |
+| `app.sh backup` | дамп создан |
+
+Особенности именно этой песочницы (на ВМ их нет):
+* Docker Hub отвечал 429. Образы скачаны через `mirror.gcr.io`, отсюда опция
+  `--mirror` и автоповторы в `app.sh`.
+* Прокси песочницы подменяет TLS, и Edge Runtime не доверял его CA.
+  Кэш модулей Deno был заполнен с хоста.
+* Контейнер `supavisor` (пул соединений) не стартует, потому что песочница
+  запрещает `ulimit`. Приложение его не использует.
+
+Не проверено: создание ВМ и DNS в Яндекс Облаке, сертификат Let's Encrypt
+на реальном домене, доступность Docker Hub с ВМ в РФ, YandexGPT.
