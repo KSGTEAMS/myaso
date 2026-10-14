@@ -1,0 +1,78 @@
+{
+  "$schema": "../business.schema.json",
+  "slug": "rebro",
+  "name": "Ребро — мясная лавка",
+  "short_name": "Ребро",
+  "locale": "ru-RU",
+  "timezone": "Europe/Moscow",
+  "currency": "RUB",
+  "brand": {
+    "accent": "#E4572E",
+    "background": "#0E0D0D",
+    "tagline": "Мясо от фермеров, разделка под ваш заказ",
+    "description": "Говядина сухого вызревания, фермерская свинина и собственная коптильня. Соберём заказ к удобному времени — заберите без очереди.",
+    "hero_image": "hero.jpg",
+    "icon_letter": "Р"
+  },
+  "contacts": {
+    "phone": "+74950000101",
+    "address": "Москва, ул. Покровка, 21, вход со двора",
+    "map_url": "https://yandex.ru/maps/?text=Москва%2C%20Покровка%2C%2021",
+    "telegram": "rebro_lavka_demo"
+  },
+  "ordering": {
+    "pickup_step_minutes": 30,
+    "min_notice_minutes": 90,
+    "horizon_days": 14,
+    "cancel_notice_minutes": 120,
+    "max_order_lines": 20,
+    "payment_note": "Взвешиваем при выдаче — оплата картой или наличными на кассе"
+  },
+  "hours": {
+    "mon": [["10:00", "21:00"]],
+    "tue": [["10:00", "21:00"]],
+    "wed": [["10:00", "21:00"]],
+    "thu": [["10:00", "21:00"]],
+    "fri": [["10:00", "22:00"]],
+    "sat": [["09:00", "22:00"]],
+    "sun": [["10:00", "20:00"]]
+  },
+  "exceptions": [
+    { "date": "2026-12-31", "hours": [["09:00", "16:00"]], "note": "Предновогодний день" },
+    { "date": "2027-01-01", "closed": true, "note": "Выходной" }
+  ],
+  "resources": [
+    { "key": "table-1", "name": "Разделочный стол 1", "kind": "cutting_table" },
+    { "key": "table-2", "name": "Разделочный стол 2", "kind": "cutting_table" },
+    { "key": "smokehouse", "name": "Коптильня", "kind": "smokehouse" },
+    { "key": "aging", "name": "Камера вызревания", "kind": "aging_chamber" }
+  ],
+  "prep_profiles": [
+    { "key": "cut", "name": "Разделка и упаковка", "base_minutes": 15, "per_kg_minutes": 5, "buffer_minutes": 10, "resources": ["table-1", "table-2"] },
+    { "key": "mince", "name": "Свежий фарш", "base_minutes": 20, "per_kg_minutes": 6, "buffer_minutes": 15, "resources": ["table-1", "table-2"] },
+    { "key": "smoke", "name": "Горячее копчение на заказ", "base_minutes": 1440, "per_kg_minutes": 30, "buffer_minutes": 60, "resources": ["smokehouse"] },
+    { "key": "dry-age", "name": "Довызревание стейков", "base_minutes": 4320, "buffer_minutes": 120, "resources": ["aging"] }
+  ],
+  "categories": [
+    { "key": "beef", "name": "Говядина" },
+    { "key": "pork", "name": "Свинина" },
+    { "key": "poultry", "name": "Птица" },
+    { "key": "smoked", "name": "Коптильня" },
+    { "key": "mince", "name": "Фарш и колбаски" }
+  ],
+  "products": [
+    { "key": "ribeye", "category": "beef", "prep": "cut", "name": "Рибай, зерновой откорм", "description": "Толстый край, мраморность Prime. Нарежем стейками 2,5–3 см.", "unit": "kg", "price": 3890, "qty_step": 0.25, "min_qty": 0.5, "max_qty": 5, "badges": ["хит"], "image": "ribeye.jpg" },
+    { "key": "striploin", "category": "beef", "prep": "cut", "name": "Стриплойн", "description": "Тонкий край, плотная текстура, яркий вкус.", "unit": "kg", "price": 3290, "qty_step": 0.25, "min_qty": 0.5, "max_qty": 5, "image": "striploin.jpg" },
+    { "key": "tenderloin", "category": "beef", "prep": "cut", "name": "Вырезка говяжья", "description": "Центральная часть, зачищена от плёнок.", "unit": "kg", "price": 4490, "qty_step": 0.25, "min_qty": 0.5, "max_qty": 3, "image": "tenderloin.jpg" },
+    { "key": "ribeye-dry-aged", "category": "beef", "prep": "dry-age", "name": "Рибай +3 дня вызревания", "description": "Доведём в камере сухого вызревания специально для вас: ореховый вкус и плотная корочка.", "unit": "kg", "price": 4790, "qty_step": 0.5, "min_qty": 1, "max_qty": 4, "badges": ["на заказ"], "image": "ribeye-aged.jpg" },
+    { "key": "pork-neck", "category": "pork", "prep": "cut", "name": "Шея свиная", "description": "Фермерская свинина, нарежем на шашлык или стейки.", "unit": "kg", "price": 890, "qty_step": 0.5, "min_qty": 1, "max_qty": 10, "image": "pork-neck.jpg" },
+    { "key": "pork-ribs", "category": "pork", "prep": "cut", "name": "Рёбра свиные", "description": "Мясистые, порубим по 2–3 кости.", "unit": "kg", "price": 690, "qty_step": 0.5, "min_qty": 1, "max_qty": 8, "image": "pork-ribs.jpg" },
+    { "key": "chicken-thigh", "category": "poultry", "prep": "cut", "name": "Бедро цыплёнка без кости", "description": "Охлаждённое, с кожей.", "unit": "kg", "price": 520, "qty_step": 0.5, "min_qty": 0.5, "max_qty": 10, "image": "chicken.jpg" },
+    { "key": "brisket-smoked", "category": "smoked", "prep": "smoke", "name": "Брискет горячего копчения", "description": "Коптим на вишне сутки специально под ваш заказ. Отдаём целым куском.", "unit": "kg", "price": 2990, "qty_step": 0.5, "min_qty": 1, "max_qty": 4, "badges": ["сутки копчения"], "image": "brisket.jpg" },
+    { "key": "ribs-smoked", "category": "smoked", "prep": "smoke", "name": "Рёбра копчёные", "description": "Свиные рёбра в пряной обсыпке.", "unit": "kg", "price": 1490, "qty_step": 0.5, "min_qty": 1, "max_qty": 5, "image": "ribs-smoked.jpg" },
+    { "key": "mince-beef", "category": "mince", "prep": "mince", "name": "Фарш говяжий 80/20", "description": "Прокрутим при вас из лопатки и грудинки.", "unit": "kg", "price": 990, "qty_step": 0.5, "min_qty": 0.5, "max_qty": 10, "image": "mince.jpg" },
+    { "key": "sausages", "category": "mince", "prep": "cut", "name": "Колбаски для гриля", "description": "Свинина и говядина, натуральная оболочка, 4 шт в упаковке.", "unit": "pcs", "price": 590, "qty_step": 1, "min_qty": 1, "max_qty": 10, "image": "sausages.jpg" }
+  ],
+  "ai": { "enabled": true, "greeting": "Подскажу по отрубам, ценам и ближайшему времени выдачи." },
+  "owner": { "email": "owner@rebro.demo" }
+}

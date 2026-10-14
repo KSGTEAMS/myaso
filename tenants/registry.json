@@ -1,0 +1,15 @@
+{
+  "tenants": [
+    {
+      "slug": "rebro",
+      "status": "preview",
+      "config_hash": "7bffeeae806c48eb803bcd4f213a9fc3",
+      "config_version": 1,
+      "published_at": "2026-10-14T16:45:44.830Z"
+    },
+    {
+      "slug": "taiga",
+      "status": "preview"
+    }
+  ]
+}

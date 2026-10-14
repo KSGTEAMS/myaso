@@ -3,10 +3,9 @@
 // only way to become an owner.
 //   npm run owner:invite -- --slug <slug> --email owner@example.com [--password ...] [--role owner|staff]
 import { randomBytes } from 'node:crypto'
-import { arg, resolveTarget, rpc, serviceClient } from './lib/env.ts'
+import { arg, resolveTarget, rpc, serviceClient, type Target } from './lib/env.ts'
 
-export async function inviteOwner(opts: { slug: string; email: string; password?: string; role?: 'owner' | 'staff' }) {
-  const target = resolveTarget()
+export async function inviteOwner(opts: { slug: string; email: string; password?: string; role?: 'owner' | 'staff' }, target: Target = resolveTarget()) {
   const sb = serviceClient(target)
   const password = opts.password ?? randomBytes(12).toString('base64url')
   let userId: string | undefined

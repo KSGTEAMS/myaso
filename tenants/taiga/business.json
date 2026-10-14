@@ -1,0 +1,69 @@
+{
+  "$schema": "../business.schema.json",
+  "slug": "taiga",
+  "name": "Тайга — дичь и фермерское мясо",
+  "short_name": "Тайга",
+  "locale": "ru-RU",
+  "timezone": "Asia/Novosibirsk",
+  "currency": "RUB",
+  "brand": {
+    "accent": "#4FB38F",
+    "background": "#0B0F0E",
+    "tagline": "Оленина, лось и пельмени ручной лепки",
+    "description": "Мясо северных хозяйств и собственная лепка. Заберите заказ в лавке на Красном проспекте.",
+    "hero_image": "hero.jpg",
+    "icon_letter": "Т"
+  },
+  "contacts": {
+    "phone": "+73830000202",
+    "address": "Новосибирск, Красный проспект, 77, павильон 4"
+  },
+  "ordering": {
+    "pickup_step_minutes": 60,
+    "min_notice_minutes": 180,
+    "horizon_days": 10,
+    "cancel_notice_minutes": 360,
+    "max_order_lines": 12,
+    "payment_note": "Оплата при получении, принимаем карты и СБП"
+  },
+  "hours": {
+    "mon": [],
+    "tue": [["11:00", "19:00"]],
+    "wed": [["11:00", "19:00"]],
+    "thu": [["11:00", "19:00"]],
+    "fri": [["11:00", "20:00"]],
+    "sat": [["10:00", "14:00"], ["15:00", "20:00"]],
+    "sun": [["10:00", "17:00"]]
+  },
+  "exceptions": [
+    { "date": "2026-11-04", "closed": true, "note": "День народного единства" }
+  ],
+  "resources": [
+    { "key": "butcher", "name": "Стол мясника", "kind": "cutting_table" },
+    { "key": "dumpling-line", "name": "Стол лепки", "kind": "dumpling_table" },
+    { "key": "smoker", "name": "Холодная коптильня", "kind": "smokehouse" }
+  ],
+  "prep_profiles": [
+    { "key": "cut", "name": "Разделка", "base_minutes": 20, "per_kg_minutes": 8, "buffer_minutes": 10, "resources": ["butcher"] },
+    { "key": "dumplings", "name": "Лепка пельменей", "base_minutes": 40, "per_kg_minutes": 25, "buffer_minutes": 20, "resources": ["dumpling-line"] },
+    { "key": "cold-smoke", "name": "Холодное копчение", "base_minutes": 2880, "per_kg_minutes": 60, "buffer_minutes": 120, "resources": ["smoker"] }
+  ],
+  "categories": [
+    { "key": "game", "name": "Дичь" },
+    { "key": "farm", "name": "Фермерское" },
+    { "key": "dumplings", "name": "Пельмени" },
+    { "key": "smoked", "name": "Копчёное" }
+  ],
+  "products": [
+    { "key": "venison-loin", "category": "game", "prep": "cut", "name": "Оленина, корейка", "description": "Нежная, почти без жира. Подходит для стейков средней прожарки.", "unit": "kg", "price": 3600, "qty_step": 0.5, "min_qty": 0.5, "max_qty": 4, "badges": ["север"], "image": "venison.jpg" },
+    { "key": "elk-shoulder", "category": "game", "prep": "cut", "name": "Лось, лопатка", "description": "Для томления и рагу. Нарежем кубом.", "unit": "kg", "price": 1450, "qty_step": 0.5, "min_qty": 1, "max_qty": 6, "image": "elk.jpg" },
+    { "key": "boar-ham", "category": "game", "prep": "cut", "name": "Кабан, окорок", "description": "Выдержан, без кости.", "unit": "kg", "price": 1350, "qty_step": 0.5, "min_qty": 1, "max_qty": 6, "image": "boar.jpg" },
+    { "key": "duck", "category": "farm", "prep": "cut", "name": "Утка фермерская", "description": "Целая тушка 2–2,5 кг, разделаем по желанию.", "unit": "pcs", "price": 1890, "qty_step": 1, "min_qty": 1, "max_qty": 3, "image": "duck.jpg" },
+    { "key": "veal-cutlet", "category": "farm", "prep": "cut", "name": "Телятина, вырезка", "description": "Молочная телятина.", "unit": "kg", "price": 2950, "qty_step": 0.5, "min_qty": 0.5, "max_qty": 3, "image": "veal.jpg" },
+    { "key": "pelmeni-venison", "category": "dumplings", "prep": "dumplings", "name": "Пельмени с олениной", "description": "Лепим вручную в день выдачи, тонкое тесто.", "unit": "kg", "price": 1590, "qty_step": 0.5, "min_qty": 1, "max_qty": 5, "badges": ["лепка в день выдачи"], "image": "pelmeni.jpg" },
+    { "key": "pelmeni-classic", "category": "dumplings", "prep": "dumplings", "name": "Пельмени сибирские", "description": "Говядина и свинина, лук, чёрный перец.", "unit": "kg", "price": 990, "qty_step": 0.5, "min_qty": 1, "max_qty": 5, "image": "pelmeni-classic.jpg" },
+    { "key": "smoked-venison", "category": "smoked", "prep": "cold-smoke", "name": "Оленина холодного копчения", "description": "Двое суток в холодной коптильне на ольхе.", "unit": "kg", "price": 4900, "qty_step": 0.5, "min_qty": 0.5, "max_qty": 2, "badges": ["2 суток"], "image": "smoked-venison.jpg" }
+  ],
+  "ai": { "enabled": true, "greeting": "Расскажу про дичь, пельмени и когда можно забрать заказ." },
+  "owner": { "email": "owner@taiga.demo" }
+}

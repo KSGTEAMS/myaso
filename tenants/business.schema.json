@@ -1,0 +1,576 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,38}[a-z0-9]$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "short_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 12
+    },
+    "locale": {
+      "default": "ru-RU",
+      "type": "string",
+      "const": "ru-RU"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "currency": {
+      "default": "RUB",
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "brand": {
+      "type": "object",
+      "properties": {
+        "accent": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "background": {
+          "default": "#0E0E10",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "tagline": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "hero_image": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_./-]+\\.(jpe?g|png|webp)$"
+        },
+        "icon_image": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_./-]+\\.(jpe?g|png|webp)$"
+        },
+        "icon_letter": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2
+        }
+      },
+      "required": [
+        "accent",
+        "tagline",
+        "description",
+        "hero_image"
+      ]
+    },
+    "contacts": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "pattern": "^\\+\\d{10,15}$"
+        },
+        "address": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 200
+        },
+        "map_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "telegram": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+        }
+      },
+      "required": [
+        "phone",
+        "address"
+      ]
+    },
+    "ordering": {
+      "type": "object",
+      "properties": {
+        "pickup_step_minutes": {
+          "default": 30,
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 240
+        },
+        "min_notice_minutes": {
+          "default": 60,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10080
+        },
+        "horizon_days": {
+          "default": 14,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 90
+        },
+        "cancel_notice_minutes": {
+          "default": 120,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10080
+        },
+        "max_order_lines": {
+          "default": 20,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "payment_note": {
+          "default": "Оплата при получении",
+          "type": "string",
+          "maxLength": 200
+        }
+      }
+    },
+    "hours": {
+      "type": "object",
+      "properties": {
+        "mon": {
+          "default": [],
+          "maxItems": 4,
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              },
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "tue": {
+          "default": [],
+          "maxItems": 4,
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              },
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "wed": {
+          "default": [],
+          "maxItems": 4,
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              },
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "thu": {
+          "default": [],
+          "maxItems": 4,
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              },
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "fri": {
+          "default": [],
+          "maxItems": 4,
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              },
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "sat": {
+          "default": [],
+          "maxItems": 4,
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              },
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "sun": {
+          "default": [],
+          "maxItems": 4,
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              },
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      }
+    },
+    "exceptions": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "closed": {
+            "default": false,
+            "type": "boolean"
+          },
+          "hours": {
+            "default": [],
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "string",
+                  "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                }
+              ],
+              "items": false,
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "note": {
+            "default": "",
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "date"
+        ]
+      }
+    },
+    "resources": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,40}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "kind": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,40}$"
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "kind"
+        ]
+      }
+    },
+    "prep_profiles": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,40}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "base_minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 20160
+          },
+          "per_kg_minutes": {
+            "default": 0,
+            "type": "number",
+            "minimum": 0,
+            "maximum": 600
+          },
+          "per_unit_minutes": {
+            "default": 0,
+            "type": "number",
+            "minimum": 0,
+            "maximum": 600
+          },
+          "buffer_minutes": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1440
+          },
+          "resources": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,40}$"
+            }
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "base_minutes",
+          "resources"
+        ]
+      }
+    },
+    "categories": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,40}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ]
+      }
+    },
+    "products": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,60}$"
+          },
+          "category": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,40}$"
+          },
+          "prep": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,40}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "maxLength": 400
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "kg",
+              "pcs"
+            ]
+          },
+          "price": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 10000000
+          },
+          "qty_step": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "min_qty": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "max_qty": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "badges": {
+            "default": [],
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 24
+            }
+          },
+          "image": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_./-]+\\.(jpe?g|png|webp)$"
+          },
+          "active": {
+            "default": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "category",
+          "prep",
+          "name",
+          "unit",
+          "price",
+          "qty_step",
+          "min_qty",
+          "max_qty"
+        ]
+      }
+    },
+    "ai": {
+      "default": {
+        "enabled": true
+      },
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "greeting": {
+          "type": "string",
+          "maxLength": 200
+        }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+        }
+      },
+      "required": [
+        "email"
+      ]
+    }
+  },
+  "required": [
+    "slug",
+    "name",
+    "short_name",
+    "timezone",
+    "brand",
+    "contacts",
+    "ordering",
+    "hours",
+    "resources",
+    "prep_profiles",
+    "categories",
+    "products"
+  ]
+}
