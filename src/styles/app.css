@@ -1,0 +1,97 @@
+/*
+ * Cascade layer order is declared once, before any import (see `astryx docs
+ * styling-libraries/tailwind`). reset < tailwind theme < preflight < Astryx
+ * components < Astryx theme < shadcn components < utilities.
+ */
+@layer reset, theme, base, astryx-base, astryx-theme, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "@astryxdesign/core/reset.css";
+@import "@astryxdesign/core/astryx.css";
+/* Theme CSS + fonts are imported by the generated src/astryx-themes.ts */
+@import "@astryxdesign/core/tailwind-theme.css";
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+
+@source "../";
+
+/*
+ * shadcn semantic names point at Astryx tokens, so a single token set drives
+ * both libraries. No raw colors here: values come from the active Astryx theme.
+ */
+@theme reference inline {
+  --color-background: var(--color-background-surface);
+  --color-foreground: var(--color-text-primary);
+  --color-muted-foreground: var(--color-text-secondary);
+  --color-ring: var(--color-accent);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background: var(--color-background-body);
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior-y: none;
+  }
+  body {
+    min-height: 100dvh;
+    background: var(--color-background-body);
+    color: var(--color-text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+  #root {
+    min-height: 100dvh;
+  }
+}
+
+@layer components {
+  /* App frame: bottom nav sits above the home indicator. */
+  .app-frame {
+    min-height: 100dvh;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: calc(var(--bottom-nav-height, 0px) + env(safe-area-inset-bottom));
+  }
+  .bottom-nav {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 40;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-background-surface);
+    border-top: 1px solid var(--color-border);
+  }
+  .photo-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .sheet-body {
+    padding-bottom: max(env(safe-area-inset-bottom), var(--spacing-4));
+  }
+  .slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: var(--spacing-2);
+  }
+  .day-strip {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(64px, 1fr);
+    gap: var(--spacing-2);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .day-strip > * { scroll-snap-align: start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

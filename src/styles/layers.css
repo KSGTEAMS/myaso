@@ -1,0 +1,4 @@
+/* Imported first from main.tsx: the canonical cascade-layer order must be
+   declared before any stylesheet (theme CSS is imported from JS by the
+   generated astryx-themes module, so app.css would otherwise come too late). */
+@layer reset, theme, base, astryx-base, astryx-theme, components, utilities;
