@@ -84,6 +84,7 @@ function Details({ order }: { order: Order }) {
   const cancelM = useMutation({ mutationFn: () => api.cancel(order.id, 'отменён магазином'), onSuccess: (o) => { done('Заказ отменён')(o); setConfirmCancel(false) } })
 
   const active = order.status === 'confirmed' || order.status === 'ready'
+  const [openedAt] = useState(() => Date.now())
   const mutError = [status, completeM, payM, moveM, cancelM].find((m) => m.isError)?.error
   const due = (order.final_amount_cents ?? order.subtotal_cents) - order.paid_cents
 
@@ -136,7 +137,7 @@ function Details({ order }: { order: Order }) {
 
       <Divider />
       <Button label={`Позвонить ${order.customer_phone}`} variant="ghost" icon={<Icon icon={Phone} />} href={`tel:${order.customer_phone}`} />
-      {order.status === 'confirmed' && Date.now() > Date.parse(order.pickup_at) ? <Button label="Не пришёл за заказом" variant="ghost" onClick={() => status.mutate('no_show')} /> : null}
+      {order.status === 'confirmed' && openedAt > Date.parse(order.pickup_at) ? <Button label="Не пришёл за заказом" variant="ghost" onClick={() => status.mutate('no_show')} /> : null}
       {active ? <Button label="Отменить заказ" variant="destructive" onClick={() => setConfirmCancel(true)} /> : null}
 
       <Sheet isOpen={complete.isOpen} onClose={complete.close} title="Выдача заказа" description="Укажите сумму после взвешивания; недостающая оплата будет записана."

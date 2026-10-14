@@ -15,7 +15,7 @@ import { QueryState } from '@/components/QueryState'
 import { dayLabel, money } from '@/lib/format'
 import { useOwner } from './owner-context'
 
-const PERIODS: Array<[Period, string]> = [['today', 'Сегодня'], ['week', 'Неделя'], ['last7', '7 дней'], ['month', 'Месяц']]
+const PERIODS: Array<[Period, string]> = [['today', 'Сегодня'], ['week', 'Неделя'], ['last7', '7 дн.'], ['month', 'Месяц']]
 
 /** All numbers are computed in SQL (owner_stats) for the same bounds the assistant uses. */
 export function StatsPage() {
@@ -26,7 +26,7 @@ export function StatsPage() {
     <VStack>
       <PageHeader title="Статистика" />
       <VStack gap={4} paddingInline={4} paddingBlockEnd={6}>
-        <SegmentedControl label="Период" value={period} onChange={(v) => setPeriod(v as Period)} layout="fill">
+        <SegmentedControl label="Период" value={period} onChange={(v) => setPeriod(v as Period)} layout="fill" size="sm">
           {PERIODS.map(([v, l]) => <SegmentedControlItem key={v} value={v} label={l} />)}
         </SegmentedControl>
         <QueryState query={q}>

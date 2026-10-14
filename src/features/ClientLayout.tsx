@@ -40,10 +40,10 @@ function Frame() {
 
 export function ClientLayout() {
   return (
-    <ShopProvider fallback={(q) => q.isError ? (
+    <ShopProvider fallback={(q) => q.isError || q.fetchStatus === 'paused' ? (
       <VStack padding={6} minHeight="100dvh" vAlign="center">
-        <EmptyState title={errorCode(q.error) === 'tenant_not_found' ? 'Магазин не найден' : 'Не удалось открыть магазин'}
-          description={errorMessage(q.error)} actions={<Button label="Повторить" variant="primary" onClick={() => q.refetch()} />} />
+        <EmptyState title={q.fetchStatus === 'paused' ? 'Нет соединения' : errorCode(q.error) === 'tenant_not_found' ? 'Магазин не найден' : 'Не удалось открыть магазин'}
+          description={q.fetchStatus === 'paused' ? 'Магазин откроется, как только появится интернет.' : errorMessage(q.error)} actions={<Button label="Повторить" variant="primary" onClick={() => q.refetch()} />} />
       </VStack>
     ) : (
       <VStack gap={4} padding={4} aria-busy="true" aria-label="Загрузка магазина">

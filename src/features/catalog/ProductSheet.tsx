@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Badge } from '@astryxdesign/core/Badge'
 import { Button } from '@astryxdesign/core/Button'
 import { HStack } from '@astryxdesign/core/HStack'
@@ -25,8 +25,8 @@ export function ProductSheet({ product, isOpen, onClose }: { product: Product | 
   const slug = useSlug()
   const cart = useCart(slug)
   const inCart = product ? cart.quantityOf(product.id) : 0
-  const [q, setQ] = useState(0)
-  useEffect(() => { if (product) setQ(inCart || product.min_qty) }, [product?.id, isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
+  // The sheet is keyed by product (see CatalogPage), so this initialiser runs per product.
+  const [q, setQ] = useState(() => (product ? inCart || product.min_qty : 0))
   if (!product) return null
   const prep = shop.prep[product.prep_profile_id]
   const hint = prepHint(shop, product)

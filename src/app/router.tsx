@@ -7,17 +7,7 @@ import { CatalogPage } from '@/features/catalog/CatalogPage'
 import { CartPage } from '@/features/cart/CartPage'
 import { OrdersPage } from '@/features/orders/OrdersPage'
 import { OrderPage } from '@/features/orders/OrderPage'
-import { ClientAssistantPage } from '@/features/assistant/ClientAssistantPage'
 import { DirectoryPage } from '@/features/directory/DirectoryPage'
-import { OwnerLayout } from '@/features/owner/OwnerLayout'
-import { TodayPage } from '@/features/owner/TodayPage'
-import { OwnerOrdersPage } from '@/features/owner/OwnerOrdersPage'
-import { OwnerOrderPage } from '@/features/owner/OwnerOrderPage'
-import { ResourcesPage } from '@/features/owner/ResourcesPage'
-import { StatsPage } from '@/features/owner/StatsPage'
-import { OwnerCatalogPage } from '@/features/owner/OwnerCatalogPage'
-import { MorePage } from '@/features/owner/MorePage'
-import { OwnerAssistantPage } from '@/features/owner/OwnerAssistantPage'
 
 function RouteError() {
   const error = useRouteError() as { status?: number } | undefined
@@ -33,17 +23,18 @@ export const router = createBrowserRouter([
   { path: '/', element: <DirectoryPage />, errorElement: <RouteError /> },
   {
     path: '/s/:slug/owner',
-    element: <OwnerLayout />,
+    // The cabinet is a separate chunk: customers never download it.
+    lazy: () => import('@/features/owner/OwnerLayout').then((m) => ({ Component: m.OwnerLayout })),
     errorElement: <RouteError />,
     children: [
-      { index: true, element: <TodayPage /> },
-      { path: 'orders', element: <OwnerOrdersPage /> },
-      { path: 'orders/:orderId', element: <OwnerOrderPage /> },
-      { path: 'resources', element: <ResourcesPage /> },
-      { path: 'stats', element: <StatsPage /> },
-      { path: 'catalog', element: <OwnerCatalogPage /> },
-      { path: 'assistant', element: <OwnerAssistantPage /> },
-      { path: 'more', element: <MorePage /> },
+      { index: true, lazy: () => import('@/features/owner/TodayPage').then((m) => ({ Component: m.TodayPage })) },
+      { path: 'orders', lazy: () => import('@/features/owner/OwnerOrdersPage').then((m) => ({ Component: m.OwnerOrdersPage })) },
+      { path: 'orders/:orderId', lazy: () => import('@/features/owner/OwnerOrderPage').then((m) => ({ Component: m.OwnerOrderPage })) },
+      { path: 'resources', lazy: () => import('@/features/owner/ResourcesPage').then((m) => ({ Component: m.ResourcesPage })) },
+      { path: 'stats', lazy: () => import('@/features/owner/StatsPage').then((m) => ({ Component: m.StatsPage })) },
+      { path: 'catalog', lazy: () => import('@/features/owner/OwnerCatalogPage').then((m) => ({ Component: m.OwnerCatalogPage })) },
+      { path: 'assistant', lazy: () => import('@/features/owner/OwnerAssistantPage').then((m) => ({ Component: m.OwnerAssistantPage })) },
+      { path: 'more', lazy: () => import('@/features/owner/MorePage').then((m) => ({ Component: m.MorePage })) },
       { path: '*', element: <Navigate to="." replace /> },
     ],
   },
@@ -56,7 +47,7 @@ export const router = createBrowserRouter([
       { path: 'cart', element: <CartPage /> },
       { path: 'orders', element: <OrdersPage /> },
       { path: 'orders/:orderId', element: <OrderPage /> },
-      { path: 'assistant', element: <ClientAssistantPage /> },
+      { path: 'assistant', lazy: () => import('@/features/assistant/ClientAssistantPage').then((m) => ({ Component: m.ClientAssistantPage })) },
       { path: '*', element: <Navigate to="." replace /> },
     ],
   },

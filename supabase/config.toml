@@ -39,9 +39,12 @@ file_size_limit = "5MiB"
 # membership), so the gateway JWT check is not required.
 [functions.public-api]
 verify_jwt = false
+import_map = "./functions/deno.json"
 
 [functions.ai-chat]
 verify_jwt = false
+import_map = "./functions/deno.json"
 
 [functions.notify-dispatch]
 verify_jwt = false
+import_map = "./functions/deno.json"

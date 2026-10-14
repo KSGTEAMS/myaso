@@ -8,13 +8,21 @@ import { errorMessage } from '@/lib/errors'
 
 /** Loading / error / empty / success for every network-backed block. */
 export function QueryState<T>(props: {
-  query: { isPending: boolean; isError: boolean; error: unknown; data: T | undefined; refetch: () => unknown; isFetching?: boolean }
+  query: { isPending: boolean; isError: boolean; error: unknown; data: T | undefined; refetch: () => unknown; isFetching?: boolean; fetchStatus?: string }
   isEmpty?: (data: T) => boolean
   empty?: { title: string; description?: string; action?: ReactNode }
   skeleton?: ReactNode
   children: (data: T) => ReactNode
 }) {
   const { query } = props
+  if (query.isPending && query.fetchStatus === 'paused') {
+    return (
+      <VStack padding={4}>
+        <Banner status="warning" title="Нет соединения" description="Данные загрузятся, как только появится интернет."
+          endContent={<Button label="Повторить" size="sm" onClick={() => query.refetch()} />} />
+      </VStack>
+    )
+  }
   if (query.isPending) {
     return <>{props.skeleton ?? (
       <VStack gap={3} padding={4} aria-busy="true" aria-label="Загрузка">

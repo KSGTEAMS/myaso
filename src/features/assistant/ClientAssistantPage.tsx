@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useShop, useSlug } from '@/app/shop-context'
 import { PageHeader } from '@/components/PageHeader'
@@ -7,7 +8,8 @@ import { AssistantChat } from './AssistantChat'
 export function ClientAssistantPage() {
   const shop = useShop()
   const slug = useSlug()
-  const latest = myOrdersStore(slug).use().find((o) => new Date(o.pickup_at).getTime() > Date.now() - 86400_000)
+  const [since] = useState(() => Date.now() - 86400_000)
+  const latest = myOrdersStore(slug).use().find((o) => new Date(o.pickup_at).getTime() > since)
   return (
     <VStack>
       <PageHeader title="Помощник" />

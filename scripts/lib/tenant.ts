@@ -272,17 +272,22 @@ export function renderShell(template: string, b: Business, kind: 'client' | 'own
   return template.replace(/<title>[^<]*<\/title>\s*/, '').replace('<!--tenant-head-->', shellHead(b, kind, heroUrl))
 }
 
-/** Write all static tenant files (assets + shells) into outDir. */
-export async function buildTenantSite(slug: string, outDir: string, template: string) {
+/** Static per-tenant files under <outDir>/t/<slug>/: media, icons, manifests. */
+export async function buildTenantAssets(slug: string, outDir: string) {
   const { business, problems } = await validateTenant(slug)
-  if (!business) throw new Error(`${slug}: ${problems.map((p) => `${p.path}: ${p.message}`).join('; ')}`)
+  if (!business || problems.length) throw new Error(`${slug}: ${problems.map((p) => `${p.path}: ${p.message}`).join('; ')}`)
   const media = await processMedia(slug, business, outDir)
   await writePwaAssets(slug, business, outDir)
   const t = path.join(outDir, 't', slug)
   writeFileSync(path.join(t, 'manifest.webmanifest'), JSON.stringify(manifest(business, 'client'), null, 2))
   writeFileSync(path.join(t, 'owner.webmanifest'), JSON.stringify(manifest(business, 'owner'), null, 2))
   const hero = media.get(business.brand.hero_image)?.replace(/^static:/, '')
-  const heroUrl = hero ? `${hero}-800.webp` : undefined
+  return { business, media, heroUrl: hero ? `${hero}-800.webp` : undefined }
+}
+
+/** Write all static tenant files (assets + shells) into outDir. */
+export async function buildTenantSite(slug: string, outDir: string, template: string) {
+  const { business, media, heroUrl } = await buildTenantAssets(slug, outDir)
   mkdirSync(path.join(outDir, 's', slug, 'owner'), { recursive: true })
   writeFileSync(path.join(outDir, 's', slug, 'index.html'), renderShell(template, business, 'client', heroUrl))
   writeFileSync(path.join(outDir, 's', slug, 'owner', 'index.html'), renderShell(template, business, 'owner', heroUrl))

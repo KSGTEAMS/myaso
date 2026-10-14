@@ -56,8 +56,8 @@ export function AssistantChat({ slug, scope, greeting, suggestions, getJwt, orde
         {messages.map((m, i) => (
           <li key={i} className={`chat-msg chat-msg-${m.role}`}>
             <Text as="p" textWrap="pretty">{m.content}</Text>
-            {m.meta?.mode === 'fallback' ? <Text type="supporting" size="2xs">Ответ по данным магазина, без ИИ</Text> : null}
-            {m.meta?.tools.length ? <Text type="supporting" size="2xs">Проверено: {m.meta.tools.filter((t) => t.ok).map((t) => TOOL_LABEL[t.name] ?? t.name).join(', ')}</Text> : null}
+            {m.meta?.mode === 'fallback' ? <Text type="supporting" size="2xs" display="block">Ответ по данным магазина, без ИИ</Text> : null}
+            {m.meta?.tools.length ? <Text type="supporting" size="2xs" display="block">Проверено: {m.meta.tools.filter((t) => t.ok).map((t) => TOOL_LABEL[t.name] ?? t.name).join(', ')}</Text> : null}
           </li>
         ))}
         {pending ? <li className="chat-msg chat-msg-assistant"><Text type="supporting">Смотрю данные…</Text></li> : null}

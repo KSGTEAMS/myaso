@@ -80,7 +80,7 @@ export function CatalogPage() {
         </div>
       ) : null}
 
-      <ProductSheet product={selected} isOpen={sheet.isOpen && !!selected} onClose={sheet.close} />
+      <ProductSheet key={selected?.id ?? 'none'} product={selected} isOpen={sheet.isOpen && !!selected} onClose={sheet.close} />
     </VStack>
   )
 }

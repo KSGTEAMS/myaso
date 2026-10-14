@@ -18,7 +18,7 @@ function Frame() {
   const base = `/s/${slug}/owner`
   return (
     <div className="app-frame" style={{ ['--bottom-nav-height' as string]: '64px' }}>
-      {tenant.status === 'preview' ? <div className="preview-flag"><Badge label="Демо-режим: данные помечены как демо, уведомления не отправляются" variant="warning" /></div> : null}
+      {tenant.status === 'preview' ? <div className="preview-flag"><Badge label="Демо-режим · без уведомлений" variant="warning" /></div> : null}
       <main id="main" className="app-main"><Outlet /></main>
       <BottomNav label="Разделы кабинета" items={[
         { to: `${base}/`, label: 'Сегодня', icon: CalendarClock, end: true },

@@ -126,7 +126,7 @@ export function CartPage() {
           <StackItem size="fill"><Text weight="semibold">{hasWeighed ? 'Ориентировочно' : 'Итого'}</Text></StackItem>
           <Heading level={2}>{money(total, shop.tenant.currency)}</Heading>
         </HStack>
-        {hasWeighed ? <Text type="supporting">Весовой товар взвешиваем при выдаче — итог может немного отличаться. {shop.tenant.profile.payment_note}</Text> : null}
+        <Text type="supporting">{hasWeighed ? 'Итог может немного отличаться после взвешивания. ' : ''}{shop.tenant.profile.payment_note}</Text>
 
         <Divider />
         <VStack gap={3}>
