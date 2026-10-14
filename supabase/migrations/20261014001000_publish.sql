@@ -10,27 +10,27 @@ declare
 begin
   select * into t from public.tenants where slug = p_slug;
   if not found then perform private.fail('tenant_not_found'); end if;
-  if not private.is_valid_timezone(t.timezone) then v_problems := v_problems || 'invalid_timezone'; end if;
+  if not private.is_valid_timezone(t.timezone) then v_problems := array_append(v_problems, 'invalid_timezone'); end if;
   if not exists (select 1 from public.products where tenant_id = t.id and is_active) then
-    v_problems := v_problems || 'no_active_products';
+    v_problems := array_append(v_problems, 'no_active_products');
   end if;
   if exists (select 1 from public.products p where p.tenant_id = t.id and p.is_active
              and not exists (select 1 from public.prep_profile_resources ppr
                              join public.resources r on r.tenant_id = ppr.tenant_id and r.id = ppr.resource_id
                              where ppr.prep_profile_id = p.prep_profile_id and r.is_active)) then
-    v_problems := v_problems || 'product_without_resource';
+    v_problems := array_append(v_problems, 'product_without_resource');
   end if;
   if not exists (select 1 from public.working_hours where tenant_id = t.id) then
-    v_problems := v_problems || 'no_working_hours';
+    v_problems := array_append(v_problems, 'no_working_hours');
   end if;
-  if coalesce(t.profile #>> '{contacts,phone}', '') = '' then v_problems := v_problems || 'no_contact_phone'; end if;
-  if coalesce(t.profile #>> '{contacts,address}', '') = '' then v_problems := v_problems || 'no_pickup_address'; end if;
+  if coalesce(t.profile #>> '{contacts,phone}', '') = '' then v_problems := array_append(v_problems, 'no_contact_phone'); end if;
+  if coalesce(t.profile #>> '{contacts,address}', '') = '' then v_problems := array_append(v_problems, 'no_pickup_address'); end if;
   if not exists (select 1 from public.tenant_members where tenant_id = t.id and role = 'owner') then
-    v_problems := v_problems || 'no_owner';
+    v_problems := array_append(v_problems, 'no_owner');
   end if;
   if not exists (select 1 from private.pickup_candidates(t.id, private.local_day(now(), t.timezone),
                                                         private.local_day(now(), t.timezone) + t.horizon_days)) then
-    v_problems := v_problems || 'no_pickup_moments_in_horizon';
+    v_problems := array_append(v_problems, 'no_pickup_moments_in_horizon');
   end if;
   return jsonb_build_object('slug', t.slug, 'status', t.status, 'ready', cardinality(v_problems) = 0,
                             'problems', to_jsonb(v_problems));
