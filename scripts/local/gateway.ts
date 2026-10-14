@@ -37,7 +37,9 @@ function verifyJwt(token: string | undefined): Record<string, any> | null {
 
 function proxy(req: http.IncomingMessage, res: http.ServerResponse, port: number, pathname: string) {
   const upstream = http.request({ host: '127.0.0.1', port, method: req.method, path: pathname, headers: { ...req.headers, host: `127.0.0.1:${port}` } }, (up) => {
-    const headers = { ...up.headers, ...CORS }
+    const headers: http.OutgoingHttpHeaders = Object.fromEntries(
+      Object.entries(up.headers).filter(([k]) => !k.toLowerCase().startsWith('access-control-')))
+    Object.assign(headers, CORS)
     res.writeHead(up.statusCode ?? 502, headers)
     up.pipe(res)
   })
@@ -89,7 +91,11 @@ async function storage(req: http.IncomingMessage, res: http.ServerResponse, rest
 
 http.createServer((req, res) => {
   const url = req.url ?? '/'
-  if (req.method === 'OPTIONS') { res.writeHead(204, CORS); return res.end() }
+  if (req.method === 'OPTIONS') {
+    const asked = req.headers['access-control-request-headers']
+    res.writeHead(204, { ...CORS, ...(asked ? { 'Access-Control-Allow-Headers': asked } : {}) })
+    return res.end()
+  }
   const m = url.match(/^\/(rest|auth|functions|storage)\/v1(\/.*)?$/)
   if (!m) { res.writeHead(404, CORS); return res.end() }
   const rest = m[2] ?? '/'
