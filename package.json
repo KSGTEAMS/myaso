@@ -15,17 +15,18 @@
     "local:start": "tsx scripts/local/stack.ts start",
     "local:stop": "tsx scripts/local/stack.ts stop",
     "local:status": "tsx scripts/local/stack.ts status",
-    "test": "vitest run",
+    "test": "vitest run --project unit --project integration",
     "test:unit": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
-    "test:functions": "deno test --allow-env --allow-net supabase/functions",
+    "test:functions": "deno check --config supabase/functions/deno.json supabase/functions/*/index.ts scripts/local/functions-server.ts",
     "test:e2e": "playwright test",
     "tenant:new": "tsx scripts/tenant-new.ts",
     "tenant:validate": "tsx scripts/tenant-validate.ts",
     "tenant:publish": "tsx scripts/tenant-publish.ts",
     "tenant:verify": "tsx scripts/tenant-verify.ts",
     "owner:invite": "tsx scripts/owner-invite.ts",
-    "seed:build": "tsx scripts/build-seed.ts"
+    "seed:build": "tsx scripts/build-seed.ts",
+    "test:stack": "vitest run --project stack"
   },
   "dependencies": {
     "@astryxdesign/core": "^0.7.0",

@@ -15,6 +15,15 @@ export default defineConfig({
       },
       {
         test: {
+          // Requires `npm run local:start` (real PostgREST, Auth, Edge Functions).
+          name: 'stack',
+          include: ['tests/stack/**/*.test.ts'],
+          fileParallelism: false,
+          testTimeout: 30000,
+        },
+      },
+      {
+        test: {
           name: 'unit',
           include: ['tests/unit/**/*.test.ts', 'src/**/*.test.ts'],
           environment: 'node',
