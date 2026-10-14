@@ -1,0 +1,26 @@
+# Additions to the official self-hosted Supabase compose files:
+#  - Caddy uses our Caddyfile and also serves the built shop site;
+#  - Edge Functions get the application secrets from app/functions.env;
+#  - Studio (the database dashboard) and Postgres listen on localhost only
+#    (use an SSH tunnel), never on the internet.
+services:
+  caddy:
+    volumes: !override
+      - ./app/caddy:/etc/caddy:ro
+      - ./app/site:/srv/site:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  functions:
+    env_file:
+      - ./app/functions.env
+
+  studio:
+    ports:
+      - "127.0.0.1:3000:3000"
+
+  # The connection pooler publishes Postgres ports; keep them on localhost.
+  supavisor:
+    ports: !override
+      - "127.0.0.1:${POSTGRES_PORT}:5432"
+      - "127.0.0.1:${POOLER_PROXY_PORT_TRANSACTION}:6543"

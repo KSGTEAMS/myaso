@@ -27,7 +27,8 @@ export function llmFromEnv(env: Env, fetchImpl?: typeof fetch): LlmCaller | null
   const apiKey = env('LLM_API_KEY')
   const model = env('LLM_MODEL')
   if (!baseUrl || !apiKey || !model) return null
-  return createLlm({ baseUrl, apiKey, model, timeoutMs: Number(env('LLM_TIMEOUT_MS') ?? 20000) }, fetchImpl)
+  return createLlm({ baseUrl, apiKey, model, timeoutMs: Number(env('LLM_TIMEOUT_MS') ?? 20000),
+    jsonResponseFormat: env('LLM_JSON_RESPONSE_FORMAT') !== 'false' }, fetchImpl)
 }
 
 export function createAiHandler(deps: AiDeps) {

@@ -1,0 +1,37 @@
+# One domain for everything: Supabase APIs by path, the static shop site for
+# the rest. Caddy obtains and renews the HTTPS certificate automatically.
+{$PROXY_DOMAIN} {
+	encode zstd gzip
+
+	@supabase_api path /auth/v1/* /rest/v1/* /realtime/v1/* /storage/v1/* /functions/v1/*
+	handle @supabase_api {
+		reverse_proxy api-gw:8000
+	}
+
+	handle {
+		root * /srv/site
+
+		# Deep links of every shop get that shop's own HTML shell
+		# (same rules as dist/_redirects for Cloudflare Pages).
+		@owner path_regexp owner ^/s/([a-z0-9-]+)/owner(/.*)?$
+		@shop path_regexp shop ^/s/([a-z0-9-]+)(/.*)?$
+		route {
+			rewrite @owner /s/{re.owner.1}/owner/index.html
+			rewrite @shop /s/{re.shop.1}/index.html
+		}
+
+		header /sw.js Cache-Control "no-cache"
+		header /s/* Cache-Control "no-cache"
+		header /assets/* Cache-Control "public, max-age=31536000, immutable"
+		header /t/* Cache-Control "public, max-age=3600"
+		@manifest path *.webmanifest
+		header @manifest Content-Type "application/manifest+json"
+		header X-Content-Type-Options "nosniff"
+		header Referrer-Policy "strict-origin-when-cross-origin"
+		header Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+		file_server
+	}
+
+	header -server
+}

@@ -2,7 +2,15 @@
 // configured with LLM_BASE_URL / LLM_API_KEY / LLM_MODEL (server secrets).
 import type { ChatMessage, ToolCall } from './types.ts'
 
-export interface LlmConfig { baseUrl: string; apiKey: string; model: string; timeoutMs?: number; maxTokens?: number }
+export interface LlmConfig {
+  baseUrl: string
+  apiKey: string
+  model: string
+  timeoutMs?: number
+  maxTokens?: number
+  /** Send response_format=json_object in JSON-intent mode (some providers reject it). */
+  jsonResponseFormat?: boolean
+}
 
 export interface LlmResponse {
   content: string | null
@@ -31,7 +39,7 @@ export function createLlm(cfg: LlmConfig, fetchImpl: typeof fetch = fetch): LlmC
           temperature: 0.2,
           max_tokens: cfg.maxTokens ?? 600,
           ...(opts.tools?.length ? { tools: opts.tools, tool_choice: 'auto' } : {}),
-          ...(opts.json ? { response_format: { type: 'json_object' } } : {}),
+          ...(opts.json && cfg.jsonResponseFormat !== false ? { response_format: { type: 'json_object' } } : {}),
         }),
       })
       const text = await res.text()

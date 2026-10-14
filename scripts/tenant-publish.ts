@@ -50,9 +50,13 @@ async function main() {
   const readiness = await rpc(sb, 'tenant_readiness', { p_slug: slug })
   if (!readiness.ready) console.log(`  not ready for live yet: ${readiness.problems.join(', ')}`)
 
-  const prev = readRegistry().find((e) => e.slug === slug)
-  upsertRegistry({ slug, status, config_hash: payload.config_hash, config_version: first.config_version, published_at: new Date().toISOString() })
-  console.log(`  registry: ${prev ? 'updated' : 'added'} (${readRegistry().length} shops in total)`)
+  // --no-registry: used by deploy/yandex/app.sh, where the registry in git is
+  // the input and must not be rewritten on the server.
+  if (!process.argv.includes('--no-registry')) {
+    const prev = readRegistry().find((e) => e.slug === slug)
+    upsertRegistry({ slug, status, config_hash: payload.config_hash, config_version: first.config_version, published_at: new Date().toISOString() })
+    console.log(`  registry: ${prev ? 'updated' : 'added'} (${readRegistry().length} shops in total)`)
+  }
 
   if (process.argv.includes('--deploy')) {
     const build = spawnSync('npm', ['run', 'build'], { stdio: 'inherit' })
