@@ -53,6 +53,24 @@
 
 ## 3. Установка (≈ 10–15 минут, в основном скачивание образов)
 
+**Если системный диск меньше 30 ГБ** (например, квота SSD 10 ГБ), добавьте к ВМ
+второй диск (HDD 20 ГБ и больше) и до установки разместите на нём данные:
+
+```bash
+lsblk                                   # найдите пустой диск без точки монтирования, например vdb
+sudo mkfs.ext4 -L data /dev/vdb         # ВНИМАНИЕ: стирает этот диск
+sudo mkdir -p /data
+echo 'LABEL=data /data ext4 defaults,nofail 0 2' | sudo tee -a /etc/fstab
+sudo mount -a
+sudo mkdir -p /data/docker /etc/docker
+echo '{ "data-root": "/data/docker" }' | sudo tee /etc/docker/daemon.json
+sudo ln -s /data/supabase /opt/supabase # Supabase и база будут на /data
+```
+
+Репозиторий в этом случае клонируйте в `/data/myaso` и сделайте ссылку
+`sudo ln -s /data/myaso /opt/myaso`.
+
+
 ```bash
 ssh admin@shop.example.ru
 sudo apt-get update && sudo apt-get install -y git

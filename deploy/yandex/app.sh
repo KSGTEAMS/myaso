@@ -13,7 +13,8 @@
 set -euo pipefail
 
 SUPABASE_REF="${SUPABASE_REF:-self-hosted/v0.8.2}"
-SUPA_DIR="${SUPA_DIR:-/opt/supabase}"
+# Resolve symlinks: /opt/supabase may point to a data disk (e.g. /data/supabase).
+SUPA_DIR="$(readlink -m "${SUPA_DIR:-/opt/supabase}")"
 REPO_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 NODE_IMAGE="${NODE_IMAGE:-node:22-bookworm}"
 COMPOSE_FILES="docker-compose.yml:docker-compose.caddy.yml:docker-compose.app.yml${EXTRA_COMPOSE:+:$EXTRA_COMPOSE}"
